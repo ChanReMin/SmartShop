@@ -7,6 +7,7 @@
 ## 📘 Overview
 
 **SmartShop** is a backend system that simulates an e-commerce platform, designed with a **multi-layered** and **clean architecture** approach.  
+
 The project focuses on:
 - Managing **products**, **inventory**, and **orders**
 - Supporting multiple **payment methods**
@@ -40,9 +41,11 @@ order = order_repo.create_order(user_id, total)
 order_repo.add_items(order, order_items)
 ```
 
-##⚙️ Service Layer Pattern
-Contains business logic such as checking stock, reducing inventory, or processing orders.
-Does not access the database directly — it delegates all data access to repositories.
+---
+
+### ⚙️ Service Layer Pattern
+- Contains business logic such as checking stock, reducing inventory, or processing orders.
+- Does not access the database directly — it delegates all data access to repositories.
 
 ```python
 insufficient = self.check_stock(items)
@@ -51,33 +54,48 @@ if insufficient:
     self.session.commit()
 ```
 
+---
+
 ### 🧩 Facade Pattern
-Acts as a coordinator layer between multiple services.
-OrderFacade calls OrderService, InventoryService, and PaymentFactory to process the entire order workflow.
+- Acts as a coordinator layer between multiple services.
+- `OrderFacade` calls `OrderService`, `InventoryService`, and `PaymentFactory` to process the entire order workflow.
 
 ```python
 order = service.create_pending_order(user_id, items)
 payment_result = strategy.pay(order.id, order.total_amount)
-``
-### 🧭 Strategy Pattern
-Each payment method (e.g., PayPal, CreditCard) is implemented as a separate strategy inheriting from PaymentStrategy.
+```
 
-Allows flexible extension of payment types without modifying existing logic.
+---
+
+### 🧭 Strategy Pattern
+- Each payment method (e.g., PayPal, CreditCard) is implemented as a separate strategy inheriting from `PaymentStrategy`.
+- Allows flexible extension of payment types without modifying existing logic.
 
 ```python
 class PayPalPayment(PaymentStrategy):
     def pay(self, order_id, amount):
-        return {"success": True, "status": "success", "message": "Paid via PayPal"}
+        return {
+            "success": True, 
+            "status": "success", 
+            "message": "Paid via PayPal"
+        }
 ```
+
+---
+
 ### 🏭 Factory Pattern
-PaymentFactory is responsible for creating the correct payment strategy instance based on the payment_method in the request.
+- `PaymentFactory` is responsible for creating the correct payment strategy instance based on the `payment_method` in the request.
 
 ```python
 strategy = PaymentFactory.get_strategy(payment_method)
 payment_result = strategy.pay(order.id, order.total_amount)
 ```
 
-### 📁 Folder Structure
+---
+
+## 📁 Folder Structure
+
+```
 app/
 ├── models/
 │   ├── order.py
@@ -105,61 +123,86 @@ app/
 │   └── auth_route.py
 │
 └── main.py
+```
 
-##⚙️ Installation & Setup
-1️⃣ Clone the repository
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+
 ```bash
 git clone https://github.com/yourusername/SmartShop.git
 cd SmartShop
 ```
-2️⃣ Create & activate a virtual environment
-bash
-Copy code
+
+### 2️⃣ Create & activate a virtual environment
+
+```bash
 python -m venv venv
+
 # Windows
 venv\Scripts\activate
+
 # Linux / macOS
 source venv/bin/activate
-3️⃣ Install dependencies
-bash
-Copy code
-pip install -r requirements.txt
-4️⃣ Configure environment variables
-Create a .env file in the project root:
+```
 
-env
-Copy code
+### 3️⃣ Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4️⃣ Configure environment variables
+
+Create a `.env` file in the project root:
+
+```env
 DATABASE_URL=mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}
 SECRET_KEY=supersecretkey
-5️⃣ Run database migrations
-bash
-Copy code
+```
+
+### 5️⃣ Run database migrations
+
+```bash
 flask db init
 flask db migrate -m "initial migration"
 flask db upgrade
-6️⃣ Start the FastAPI server
-bash
-Copy code
-uvicorn app.main:app --reload
-Open the interactive API docs at 👉 http://127.0.0.1:8000/docs
+```
 
-🧪 Example API Usage
-📦 Create Order
-POST /api/order
+### 6️⃣ Start the localhost server
 
-Request Body
-json
-Copy code
+```bash
+python run.py
+```
+
+---
+
+## 🧪 Example API Usage
+
+### 📦 Create Order
+
+**Endpoint:** `POST /api/order`
+
+**Request Body:**
+
+```json
 {
   "user_id": 1,
   "items": [
-    { "product_id": 2, "quantity": 10 }
+    { 
+      "product_id": 2, 
+      "quantity": 10 
+    }
   ],
   "payment": "creditcard"
 }
-Response
-json
-Copy code
+```
+
+**Response:**
+
+```json
 {
   "success": true,
   "order_id": 23,
@@ -167,3 +210,6 @@ Copy code
   "status": "success",
   "message": "Order placed and paid successfully"
 }
+```
+
+---
