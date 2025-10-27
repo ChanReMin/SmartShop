@@ -60,6 +60,7 @@ if insufficient:
 order = service.create_pending_order(user_id, items)
 payment_result = strategy.pay(order.id, order.total_amount)
 
+
 🧭 Strategy Pattern
 - Mỗi phương thức thanh toán (PayPal, CreditCard, v.v.) là một chiến lược riêng biệt kế thừa PaymentStrategy.
 - Cho phép mở rộng dễ dàng mà không chỉnh sửa code cũ.
@@ -75,6 +76,7 @@ class PayPalPayment(PaymentStrategy):
 ```python
 strategy = PaymentFactory.get_strategy(payment_method)
 payment_result = strategy.pay(order.id, order.total_amount)
+
 
 📁 Folder Structure
 app/
