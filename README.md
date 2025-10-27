@@ -51,7 +51,7 @@ if insufficient:
     self.session.commit()
 ```
 
-##🧩 Facade Pattern
+### 🧩 Facade Pattern
 Acts as a coordinator layer between multiple services.
 OrderFacade calls OrderService, InventoryService, and PaymentFactory to process the entire order workflow.
 
@@ -59,7 +59,7 @@ OrderFacade calls OrderService, InventoryService, and PaymentFactory to process 
 order = service.create_pending_order(user_id, items)
 payment_result = strategy.pay(order.id, order.total_amount)
 ``
-##🧭 Strategy Pattern
+### 🧭 Strategy Pattern
 Each payment method (e.g., PayPal, CreditCard) is implemented as a separate strategy inheriting from PaymentStrategy.
 
 Allows flexible extension of payment types without modifying existing logic.
@@ -69,7 +69,7 @@ class PayPalPayment(PaymentStrategy):
     def pay(self, order_id, amount):
         return {"success": True, "status": "success", "message": "Paid via PayPal"}
 ```
-##🏭 Factory Pattern
+### 🏭 Factory Pattern
 PaymentFactory is responsible for creating the correct payment strategy instance based on the payment_method in the request.
 
 ```python
@@ -77,7 +77,7 @@ strategy = PaymentFactory.get_strategy(payment_method)
 payment_result = strategy.pay(order.id, order.total_amount)
 ```
 
-📁 Folder Structure
+### 📁 Folder Structure
 app/
 ├── models/
 │   ├── order.py
