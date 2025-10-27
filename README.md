@@ -38,46 +38,46 @@ The project focuses on:
 ```python
 order = order_repo.create_order(user_id, total)
 order_repo.add_items(order, order_items)
-⚙️ Service Layer Pattern
-Contains business logic such as checking stock, reducing inventory, or processing orders.
+```
 
+##⚙️ Service Layer Pattern
+Contains business logic such as checking stock, reducing inventory, or processing orders.
 Does not access the database directly — it delegates all data access to repositories.
 
-python
-Copy code
+```python
 insufficient = self.check_stock(items)
 if insufficient:
     order.status = OrderStatus.FAILED.value
     self.session.commit()
-🧩 Facade Pattern
-Acts as a coordinator layer between multiple services.
+```
 
+##🧩 Facade Pattern
+Acts as a coordinator layer between multiple services.
 OrderFacade calls OrderService, InventoryService, and PaymentFactory to process the entire order workflow.
 
-python
-Copy code
+```python
 order = service.create_pending_order(user_id, items)
 payment_result = strategy.pay(order.id, order.total_amount)
-🧭 Strategy Pattern
+``
+##🧭 Strategy Pattern
 Each payment method (e.g., PayPal, CreditCard) is implemented as a separate strategy inheriting from PaymentStrategy.
 
 Allows flexible extension of payment types without modifying existing logic.
 
-python
-Copy code
+```python
 class PayPalPayment(PaymentStrategy):
     def pay(self, order_id, amount):
         return {"success": True, "status": "success", "message": "Paid via PayPal"}
-🏭 Factory Pattern
+```
+##🏭 Factory Pattern
 PaymentFactory is responsible for creating the correct payment strategy instance based on the payment_method in the request.
 
-python
-Copy code
+```python
 strategy = PaymentFactory.get_strategy(payment_method)
 payment_result = strategy.pay(order.id, order.total_amount)
+```
+
 📁 Folder Structure
-css
-Copy code
 app/
 ├── models/
 │   ├── order.py
@@ -105,12 +105,13 @@ app/
 │   └── auth_route.py
 │
 └── main.py
-⚙️ Installation & Setup
+
+##⚙️ Installation & Setup
 1️⃣ Clone the repository
-bash
-Copy code
+```bash
 git clone https://github.com/yourusername/SmartShop.git
 cd SmartShop
+```
 2️⃣ Create & activate a virtual environment
 bash
 Copy code
