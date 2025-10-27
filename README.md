@@ -6,11 +6,11 @@
 
 ## 📘 Overview
 
-**SmartShop** là hệ thống backend mô phỏng sàn thương mại điện tử, được thiết kế với kiến trúc **đa tầng** và **clean architecture**.  
-Dự án tập trung vào:
-- Quản lý **sản phẩm**, **tồn kho**, **đơn hàng**
-- Hỗ trợ nhiều **phương thức thanh toán**
-- Mô-đun hóa bằng **Design Patterns** (Repository, Factory, Strategy, Facade, Service Layer)
+**SmartShop** is a backend system that simulates an e-commerce platform, designed with a **multi-layered** and **clean architecture** approach.  
+The project focuses on:
+- Managing **products**, **inventory**, and **orders**
+- Supporting multiple **payment methods**
+- Modularized with key **Design Patterns** (Repository, Factory, Strategy, Facade, Service Layer)
 
 ---
 
@@ -22,8 +22,8 @@ Dự án tập trung vào:
 | **Framework** | FastAPI |
 | **ORM** | SQLAlchemy |
 | **Database** | SQL Server |
-| **Auth** | JWT |
-| **Design Patterns** | Repository, Factory, Strategy, Facade, Service |
+| **Authentication** | JWT |
+| **Design Patterns** | Repository, Factory, Strategy, Facade, Service Layer |
 | **Environment** | `.env` configuration |
 
 ---
@@ -31,54 +31,53 @@ Dự án tập trung vào:
 ## 🧠 Design Patterns Overview
 
 ### 🏢 Repository Pattern
-- Mỗi bảng trong database có 1 repository riêng (`OrderRepository`, `ProductRepository`, `InventoryRepository`).
-- Tách biệt logic truy cập dữ liệu khỏi logic nghiệp vụ.  
-- Giúp dễ test, bảo trì và thay đổi DB mà không ảnh hưởng các tầng khác.
+- Each database table has its own repository (`OrderRepository`, `ProductRepository`, `InventoryRepository`).
+- Separates **data access logic** from **business logic**.
+- Improves testability, maintainability, and flexibility when changing the database layer.
 
 ```python
 order = order_repo.create_order(user_id, total)
 order_repo.add_items(order, order_items)
-
-
 ⚙️ Service Layer Pattern
+Contains business logic such as checking stock, reducing inventory, or processing orders.
 
-- Chứa logic nghiệp vụ (business logic) như kiểm tra tồn kho, giảm tồn, xử lý đơn hàng.
-- Không truy cập DB trực tiếp, mà gọi repository tương ứng.
+Does not access the database directly — it delegates all data access to repositories.
 
-```python
+python
+Copy code
 insufficient = self.check_stock(items)
 if insufficient:
     order.status = OrderStatus.FAILED.value
     self.session.commit()
-
-
 🧩 Facade Pattern
-- Đóng vai trò là lớp “điều phối” giữa các service:
-- OrderFacade gọi OrderService, InventoryService và PaymentFactory để xử lý toàn bộ quy trình đặt hàng.
+Acts as a coordinator layer between multiple services.
 
-```python
+OrderFacade calls OrderService, InventoryService, and PaymentFactory to process the entire order workflow.
+
+python
+Copy code
 order = service.create_pending_order(user_id, items)
 payment_result = strategy.pay(order.id, order.total_amount)
-
-
 🧭 Strategy Pattern
-- Mỗi phương thức thanh toán (PayPal, CreditCard, v.v.) là một chiến lược riêng biệt kế thừa PaymentStrategy.
-- Cho phép mở rộng dễ dàng mà không chỉnh sửa code cũ.
+Each payment method (e.g., PayPal, CreditCard) is implemented as a separate strategy inheriting from PaymentStrategy.
 
-```python
+Allows flexible extension of payment types without modifying existing logic.
+
+python
+Copy code
 class PayPalPayment(PaymentStrategy):
     def pay(self, order_id, amount):
         return {"success": True, "status": "success", "message": "Paid via PayPal"}
-
 🏭 Factory Pattern
-- PaymentFactory chịu trách nhiệm khởi tạo chiến lược thanh toán phù hợp dựa trên payment_method trong request.
+PaymentFactory is responsible for creating the correct payment strategy instance based on the payment_method in the request.
 
-```python
+python
+Copy code
 strategy = PaymentFactory.get_strategy(payment_method)
 payment_result = strategy.pay(order.id, order.total_amount)
-
-
 📁 Folder Structure
+css
+Copy code
 app/
 ├── models/
 │   ├── order.py
@@ -106,42 +105,50 @@ app/
 │   └── auth_route.py
 │
 └── main.py
-
 ⚙️ Installation & Setup
-1️⃣ Clone repository
+1️⃣ Clone the repository
+bash
+Copy code
 git clone https://github.com/yourusername/SmartShop.git
 cd SmartShop
-
-2️⃣ Create & activate virtual environment
+2️⃣ Create & activate a virtual environment
+bash
+Copy code
 python -m venv venv
 # Windows
 venv\Scripts\activate
-# Linux / Mac
+# Linux / macOS
 source venv/bin/activate
-
 3️⃣ Install dependencies
+bash
+Copy code
 pip install -r requirements.txt
+4️⃣ Configure environment variables
+Create a .env file in the project root:
 
-4️⃣ Setup database config
-
-Tạo file .env trong thư mục gốc:
-
+env
+Copy code
 DATABASE_URL=mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}
 SECRET_KEY=supersecretkey
-
-5️⃣ Run migrations (nếu có)
+5️⃣ Run database migrations
+bash
+Copy code
 flask db init
-flask db migrate -m "migrating.."
+flask db migrate -m "initial migration"
 flask db upgrade
-
+6️⃣ Start the FastAPI server
+bash
+Copy code
+uvicorn app.main:app --reload
+Open the interactive API docs at 👉 http://127.0.0.1:8000/docs
 
 🧪 Example API Usage
 📦 Create Order
-
 POST /api/order
 
 Request Body
-
+json
+Copy code
 {
   "user_id": 1,
   "items": [
@@ -149,10 +156,9 @@ Request Body
   ],
   "payment": "creditcard"
 }
-
-
 Response
-
+json
+Copy code
 {
   "success": true,
   "order_id": 23,
@@ -160,6 +166,3 @@ Response
   "status": "success",
   "message": "Order placed and paid successfully"
 }
-
-
-
