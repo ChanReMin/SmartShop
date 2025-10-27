@@ -1,0 +1,49 @@
+<!-- templates/admin/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Flask Shop{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/index.css') }}">
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+    
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>Total Products</h3>
+            <p class="stat-number">{{ total_products }}</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Total Orders</h3>
+            <p class="stat-number">{{ total_orders }}</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Total Revenue</h3>
+            <p class="stat-number">${{ total_revenue }}</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Total Users</h3>
+            <p class="stat-number">{{ total_users }}</p>
+        </div>
+    </div>
+    
+    <div class="admin-menu">
+        <h2>Quick Actions</h2>
+        <div class="menu-grid">
+            <a href="{{ url_for('admin.product_index') }}" class="menu-item">
+                <h3>Manage Products</h3>
+                <p>Add, edit, or delete products</p>
+            </a>
+            
+            <a href="{{ url_for('admin.order_index') }}" class="menu-item">
+                <h3>Manage Orders</h3>
+                <p>View and process orders</p>
+            </a>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

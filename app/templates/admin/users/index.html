@@ -1,0 +1,135 @@
+<!-- templates/admin/products/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Manage Products - Admin{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/products.css') }}">
+
+<div class="admin-products">
+    <div class="page-header">
+        <h1>Quản lý người dùng</h1>
+        <button data-bs-toggle="modal" data-bs-target="#add-user-popup"
+                class="btn btn-success" type="button">
+            <span>+</span> Thêm người dùng
+        </button>
+    </div>
+
+    <div class="products-container">
+        <div class="table-wrapper">
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Thời gian tạo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in all_users %}
+                    <tr>
+                        <td>{{ (page - 1) * per_page + loop.index }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.created_at.strftime('%d-%m-%Y') }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button data-bs-toggle="modal" data-bs-target="#edit-user-popup"
+                                        class="btn btn-edit edit-btn" type="button"
+                                        data-id="{{ user.id }}"
+                                        data-username="{{ user.username }}"
+                                        data-email="{{ user.email }}">
+                                    Sửa
+                                </button>
+                                <button data-bs-toggle="modal" data-bs-target="#delete-user-popup"
+                                        class="btn btn-delete delete-btn"
+                                        data-id="{{ user.id }}"
+                                        data-name="{{ user.username }}"
+                                        type="button">
+                                    Xóa
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-wrapper">
+            <ul class="pagination">
+                <!-- First Page -->
+                <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('admin.user_index', page=1) }}">
+                        «
+                    </a>
+                </li>
+                
+                <!-- Previous Page -->
+                <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('admin.user_index', page=page-1) }}">
+                        ‹
+                    </a>
+                </li>
+
+                {% set start_page = [1, page - 2]|max %}
+                {% set end_page = [total_pages, page + 2]|min %}
+
+                <!-- First page if not in range -->
+                {% if start_page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('admin.user_index', page=1) }}">1</a>
+                    </li>
+                    {% if start_page > 2 %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                <!-- Page numbers -->
+                {% for p in range(start_page, end_page + 1) %}
+                    <li class="page-item {% if page == p %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('admin.user_index', page=p) }}">{{ p }}</a>
+                    </li>
+                {% endfor %}
+
+                <!-- Last page if not in range -->
+                {% if end_page < total_pages %}
+                    {% if end_page < total_pages - 1 %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {% endif %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('admin.user_index', page=total_pages) }}">{{ total_pages }}</a>
+                    </li>
+                {% endif %}
+
+                <!-- Next Page -->
+                <li class="page-item {% if page == total_pages or total_pages == 0 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('admin.user_index', page=page + 1) }}">
+                        ›
+                    </a>
+                </li>
+
+                <!-- Last Page -->
+                <li class="page-item {% if page == total_pages or total_pages == 0 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('admin.user_index', page=total_pages) }}">
+                        »
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+{% include "admin/users/modals/add.html" %}
+{% include "admin/users/modals/edit.html" %}
+{% include "admin/users/modals/delete.html" %}
+
+<script src="{{ url_for('static', filename='js/admin/users.js') }}"></script>
+{% endblock %}

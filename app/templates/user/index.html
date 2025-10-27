@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+<h2>User Dashboard</h2>
+
+{% if user %}
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Admin:</strong> {{ 'Yes' if user.is_admin else 'No' }}</p>
+{% else %}
+    <p>No user data found. Please <a href="{{ url_for('auth.login') }}">log in</a>.</p>
+{% endif %}
+{% endblock %}

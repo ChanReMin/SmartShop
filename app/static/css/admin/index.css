@@ -1,0 +1,75 @@
+.admin-dashboard {
+    padding: 2rem 0;
+}
+
+.admin-dashboard h1 {
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.stat-card h3 {
+    margin: 0 0 0.5rem 0;
+    color: #666;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+    margin: 0;
+}
+
+.admin-menu h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.menu-item {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.menu-item h3 {
+    margin: 0 0 0.5rem 0;
+    color: #007bff;
+}
+
+.menu-item p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}

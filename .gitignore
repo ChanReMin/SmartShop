@@ -1,0 +1,70 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+*.env
+*.env.*
+.DS_Store
+
+# Byte-compiled / optimized / DLL files
+*.so
+*.dll
+*.dylib
+
+# SQLite / local DB
+*.db
+*.sqlite3
+instance/
+migrations/
+
+# Log files
+*.log
+logs/
+*.pid
+
+# Temporary files
+tmp/
+temp/
+.cache/
+.idea/
+.vscode/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Model & data
+*.onnx
+*.h5
+*.pth
+*.pt
+*.ckpt
+*.weights
+*.tflite
+*.pkl
+datasets/
+checkpoints/
+uploads/
+media/
+
+# =====================================
+# 🖥️ FastAPI / Flask specific
+# =====================================
+__pycache__/
+*.db
+*.sqlite
+*.sqlite3
+.env
+.env.*
+*.log
+instance/
+
+
+SmartShop.rar

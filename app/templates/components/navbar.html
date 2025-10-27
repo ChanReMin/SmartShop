@@ -1,0 +1,32 @@
+<!-- templates/components/navbar.html -->
+<header>
+  <nav class="navbar">
+    <h1><a href="{{ url_for('home.index') }}">🛍 SmartShop</a></h1>
+    <ul>
+      {% if user %}
+        <li><strong>{{ user.username }}</strong></li>
+
+        {% if user.is_admin %}
+          <!-- Admin actions -->
+          <li><a href="{{ url_for('admin.product_index') }}">Products</a></li>
+          <li><a href="{{ url_for('admin.order_index') }}">Orders</a></li>
+          <li><a href="{{ url_for('admin.user_index') }}">Users</a></li>
+        {% else %}
+          <!-- Customer actions -->
+          <li><a href="{{ url_for('user.products') }}">Shop</a></li>
+          <li><a href="{{ url_for('user.orders') }}">My Orders</a></li>
+          <li><a href="{{ url_for('user.inventory') }}">Inventory</a></li>
+        {% endif %}
+
+        <li>
+          <form action="{{ url_for('auth.logout') }}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-link" style="color:white; border:none; background:none;">Logout</button>
+          </form>
+        </li>
+      {% else %}
+        <li><a href="{{ url_for('auth.login_page') }}">Login</a></li>
+        <li><a href="{{ url_for('auth.register_page') }}">Register</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</header>
